@@ -3,7 +3,7 @@ import 'assets/App.css';
 import { useState } from 'react';
 
 function App() {
-  const [companyId, setCompanyId] = useState(null);
+  const [companyId, setCompanyId] = useState('');
 
   return (
     <div className="container">

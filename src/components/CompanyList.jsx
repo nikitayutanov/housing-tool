@@ -4,7 +4,7 @@ import './CompanyList.css';
 
 function CompanyList({ setCompanyId }) {
   const [companies, setCompanies] = useState([]);
-  const [selectValue, setSelectValue] = useState(null);
+  const [selectValue, setSelectValue] = useState('');
 
   useEffect(() => {
     const url = `${BASE_URL}/Request/companies`;
@@ -13,6 +13,7 @@ function CompanyList({ setCompanyId }) {
       .then((response) => response.json())
       .then((data) => {
         setCompanies(data);
+        setSelectValue(data[0].id);
       });
   }, []);
 
