@@ -7,8 +7,6 @@ function ListItem(props) {
   const handleClick = (e) => {
     e.stopPropagation();
 
-    console.log(isLeaf);
-
     if (isLeaf) {
       setClients(clients);
     } else {
