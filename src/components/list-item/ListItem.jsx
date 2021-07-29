@@ -1,12 +1,19 @@
 import { useState } from 'react';
 
 function ListItem(props) {
-  const { value, children } = props;
+  const { value, children, isLeaf, clients, setClients } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (e) => {
     e.stopPropagation();
-    setIsOpen((prevState) => !prevState);
+
+    console.log(isLeaf);
+
+    if (isLeaf) {
+      setClients(clients);
+    } else {
+      setIsOpen((prevState) => !prevState);
+    }
   };
 
   return (

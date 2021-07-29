@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import List from 'components/list/List';
 import ListItem from 'components/list-item/ListItem';
+import ClientList from 'components/client-list/ClientList';
 import BASE_URL from 'constants.js';
 import './HousingList.css';
 
 function HousingList({ companyId }) {
-  const [housingStock, setHousingStock] = useState([]);
   const [tree, setTree] = useState([]);
+  const [clients, setClients] = useState([]);
 
   useEffect(() => {
     const url = `${BASE_URL}/HousingStock?companyId=${companyId}`;
@@ -14,14 +15,14 @@ function HousingList({ companyId }) {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        setHousingStock(data);
+        const housingStock = data;
 
         let currentStreetId = null;
         let currentHouseId = null;
         const streets = {};
         const houses = {};
 
-        for (const item of data) {
+        for (const item of housingStock) {
           // order of items in housingStock matters
           const { streetId, streetName, houseId, building, corpus } = item;
 
@@ -46,7 +47,7 @@ function HousingList({ companyId }) {
           }
         }
 
-        for (const item of data) {
+        for (const item of housingStock) {
           const { houseId } = item;
           const newItem = { ...item, value: item.flat, id: item.addressId };
           houses[houseId].children.push(newItem);
@@ -69,10 +70,16 @@ function HousingList({ companyId }) {
 
   const renderTree = (tree) => {
     return tree.map((node) => {
-      const { id, value, children } = node;
+      const { id, value, children, clients } = node;
 
       return (
-        <ListItem value={value} key={id}>
+        <ListItem
+          value={value}
+          key={id}
+          isLeaf={!children?.length}
+          clients={clients}
+          setClients={setClients}
+        >
           {children && <List>{renderTree(children)}</List>}
         </ListItem>
       );
@@ -81,7 +88,11 @@ function HousingList({ companyId }) {
 
   return (
     <div className="housing-list-wrapper">
-      {<ul className="housing-list">{renderTree(tree)}</ul>}
+      {clients.length ? (
+        <ClientList clients={clients} />
+      ) : (
+        <ul className="housing-list">{renderTree(tree)}</ul>
+      )}
     </div>
   );
 }
