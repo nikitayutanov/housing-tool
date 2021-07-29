@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import List from 'components/list/List';
+import ListItem from 'components/list-item/ListItem';
 import BASE_URL from 'constants.js';
 import './HousingList.css';
 
@@ -65,17 +67,14 @@ function HousingList({ companyId }) {
       });
   }, [companyId]);
 
-  const handleClick = () => {};
-
   const renderTree = (tree) => {
     return tree.map((node) => {
       const { id, value, children } = node;
 
       return (
-        <li key={id} onClick={handleClick}>
-          {value}
-          {children && <ul>{renderTree(children)}</ul>}
-        </li>
+        <ListItem value={value} key={id}>
+          {children && <List>{renderTree(children)}</List>}
+        </ListItem>
       );
     });
   };
