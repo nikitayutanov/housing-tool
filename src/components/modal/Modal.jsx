@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom/cjs/react-dom.development';
+import CloseButton from 'components/close-button/CloseButton';
 import './Modal.css';
 
 function Modal({ children, close }) {
@@ -11,7 +12,7 @@ function Modal({ children, close }) {
   const component = (
     <div className="modal-overlay" onClick={handleOutsideClick}>
       <div className="modal">
-        <button className="close-button" onClick={close}></button>
+        <CloseButton onClick={close} />
         {children}
       </div>
     </div>

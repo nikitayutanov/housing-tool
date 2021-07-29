@@ -3,11 +3,3 @@
   justify-content: center;
   flex-wrap: wrap;
 }
-
-.client {
-  min-width: 200px;
-  margin: 0.5rem;
-  padding: 1rem;
-  border: 1px solid #fff;
-  border-radius: 10px;
-}

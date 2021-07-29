@@ -1,4 +1,4 @@
-import InfoField from 'components/info-field/InfoField';
+import ClientCard from 'components/client-card/ClientCard';
 import Modal from 'components/modal/Modal';
 import Form from 'components/form/Form';
 import './ClientList.css';
@@ -23,11 +23,13 @@ function ClientList({ clients }) {
           const { id, bindId, email, name, phone } = client;
 
           return (
-            <li className="client" key={id}>
-              <InfoField label="Имя" value={name} />
-              <InfoField label="Телефон" value={phone} />
-              <InfoField label="Эл. почта" value={email} />
-            </li>
+            <ClientCard
+              key={id}
+              email={email}
+              name={name}
+              phone={phone}
+              bindId={bindId}
+            />
           );
         })}
       </ul>
