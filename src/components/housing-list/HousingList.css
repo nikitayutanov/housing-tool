@@ -1,0 +1,7 @@
+.housing-list ul {
+  margin-left: 1rem;
+}
+
+.housing-list li {
+  cursor: pointer;
+}
