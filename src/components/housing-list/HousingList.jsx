@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import List from 'components/list/List';
 import ListItem from 'components/list-item/ListItem';
 import ClientList from 'components/client-list/ClientList';
+import Modal from 'components/modal/Modal';
 import BASE_URL from 'constants.js';
 import './HousingList.css';
 
 function HousingList({ companyId }) {
   const [tree, setTree] = useState([]);
   const [clients, setClients] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const url = `${BASE_URL}/HousingStock?companyId=${companyId}`;
@@ -30,13 +32,14 @@ function HousingList({ companyId }) {
             currentStreetId = streetId;
             streets[streetId] = {
               id: streetId,
-              value: streetName,
+              value: `Улица ${streetName}`,
               children: [],
             };
           }
           if (houseId !== currentHouseId) {
             currentHouseId = houseId;
-            const address = corpus ? `${building}/${corpus}` : building;
+            const address =
+              'Дом ' + (corpus ? `${building}/${corpus}` : building);
 
             houses[houseId] = {
               parentId: streetId,
@@ -49,7 +52,11 @@ function HousingList({ companyId }) {
 
         for (const item of housingStock) {
           const { houseId } = item;
-          const newItem = { ...item, value: item.flat, id: item.addressId };
+          const newItem = {
+            ...item,
+            value: `Квартира ${item.flat}`,
+            id: item.addressId,
+          };
           houses[houseId].children.push(newItem);
         }
 
@@ -68,6 +75,14 @@ function HousingList({ companyId }) {
       });
   }, [companyId]);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const renderTree = (tree) => {
     return tree.map((node) => {
       const { id, value, children, clients } = node;
@@ -79,6 +94,7 @@ function HousingList({ companyId }) {
           isLeaf={!children?.length}
           clients={clients}
           setClients={setClients}
+          openModal={openModal}
         >
           {children && <List>{renderTree(children)}</List>}
         </ListItem>
@@ -86,12 +102,19 @@ function HousingList({ companyId }) {
     });
   };
 
+  console.log(tree);
+
   return (
     <div className="housing-list-wrapper">
       {clients.length ? (
         <ClientList clients={clients} />
       ) : (
         <ul className="housing-list">{renderTree(tree)}</ul>
+      )}
+      {isModalOpen && (
+        <Modal close={closeModal}>
+          <p>В выбранной квартире нет жильцов</p>
+        </Modal>
       )}
     </div>
   );

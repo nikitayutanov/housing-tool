@@ -4,7 +4,7 @@ import 'assets/App.css';
 import { useState } from 'react';
 
 function App() {
-  const [companyId, setCompanyId] = useState('');
+  const [companyId, setCompanyId] = useState(1);
 
   return (
     <div className="container">
