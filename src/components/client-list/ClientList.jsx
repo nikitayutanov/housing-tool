@@ -1,6 +1,7 @@
 import ClientCard from 'components/client-card/ClientCard';
 import Modal from 'components/modal/Modal';
 import Form from 'components/form/Form';
+import Button from 'components/button/Button';
 import './ClientList.css';
 import { useState } from 'react';
 
@@ -17,7 +18,7 @@ function ClientList({ clients }) {
 
   return (
     <>
-      <button onClick={openModal}>Добавить</button>
+      <Button className="client-list-button" onClick={openModal} value="Добавить" />
       <ul className="clients">
         {clients.map((client) => {
           const { id, bindId, email, name, phone } = client;

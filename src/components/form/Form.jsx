@@ -1,5 +1,6 @@
 import './Form.css';
 import Input from 'components/input/Input';
+import Button from 'components/button/Button';
 import { useState } from 'react';
 import BASE_URL from 'constants.js';
 
@@ -25,7 +26,7 @@ function Form({ closeModal }) {
         body: JSON.stringify(values),
       })
         .then((response) => {
-          console.log(response);
+          console.log(response.json());
           closeModal();
         })
         .catch((error) => console.log(`Something went wrong: ${error}`));
@@ -55,7 +56,7 @@ function Form({ closeModal }) {
         values={values}
         setValues={setValues}
       />
-      <button onClick={handleClick}>Ок</button>
+      <Button onClick={handleClick} value="Ок" />
     </form>
   );
 }

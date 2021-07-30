@@ -4,6 +4,10 @@
   align-items: center;
 }
 
-.company-list-wrapper > :not(:last-child) {
+.company-list-text {
   margin-bottom: 1rem;
+}
+
+.company-list {
+  margin-bottom: 2rem;
 }

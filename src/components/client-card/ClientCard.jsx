@@ -11,7 +11,7 @@ function ClientCard({ name, phone, email, bindId }) {
       method: 'DELETE',
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.json());
       })
       .catch((error) => console.log(`Something went wrong: ${error}`));
   };
