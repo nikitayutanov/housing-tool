@@ -1,4 +1,9 @@
-import { SET_CLIENTS, RESET_CLIENTS } from 'constants.js';
+import {
+  SET_CLIENTS,
+  RESET_CLIENTS,
+  ADD_CLIENT,
+  DELETE_CLIENT,
+} from 'constants.js';
 
 function clientsReducer(state = [], action) {
   const { type, payload } = action;
@@ -8,6 +13,10 @@ function clientsReducer(state = [], action) {
       return payload;
     case RESET_CLIENTS:
       return [];
+    case ADD_CLIENT:
+      return [...state, payload];
+    case DELETE_CLIENT:
+      return state.filter((client) => client.bindId !== payload);
     default:
       return state;
   }
