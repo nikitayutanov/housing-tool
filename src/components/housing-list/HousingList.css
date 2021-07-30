@@ -1,9 +1,30 @@
+.housing-list,
+.housing-list ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .housing-list ul {
   margin-left: 1rem;
 }
 
-.housing-list li {
+.housing-list > li {
+  margin-bottom: 0.25rem;
+}
+
+.li-wrapper {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: #1f212a;
+  border-radius: 10px;
+  transition: all 0.25s;
   cursor: pointer;
+}
+
+.li-wrapper:hover {
+  color: #ccc;
 }
 
 .back-button {

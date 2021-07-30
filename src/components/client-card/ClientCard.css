@@ -7,4 +7,10 @@
   border: 1px solid #fff;
   border-radius: 10px;
   position: relative;
+  background-color: #1f212a;
+  transition: all 0.25s;
+}
+
+.client:hover {
+  background-color: #282b35;
 }

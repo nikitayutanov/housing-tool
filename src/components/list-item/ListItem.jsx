@@ -24,7 +24,7 @@ function ListItem(props) {
 
   return (
     <li onClick={handleClick}>
-      {value}
+      <span className="li-wrapper">{value}</span>
       {isOpen && children}
     </li>
   );
