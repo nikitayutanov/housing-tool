@@ -30,62 +30,78 @@ function HousingList() {
 
     fetch(url)
       .then((response) => response.json())
-      .then((data) => {
-        const housingStock = data;
+      .then((housingStock) => {
+        const sortedByHouses = {};
+        const sortedByStreets = {};
+        const unpackedStock = [];
 
-        let currentStreetId = null;
-        let currentHouseId = null;
-        const streets = {};
-        const houses = {};
-
-        for (const item of housingStock) {
-          // order of items in housingStock matters
-          const { streetId, streetName, houseId, building, corpus } = item;
-
-          if (streetId !== currentStreetId) {
-            currentStreetId = streetId;
-            streets[streetId] = {
-              id: streetId,
-              value: `Улица ${streetName}`,
-              children: [],
-            };
-          }
-          if (houseId !== currentHouseId) {
-            currentHouseId = houseId;
+        const sortStockByHouses = () => {
+          for (const item of housingStock) {
+            const {
+              streetId,
+              streetName,
+              houseId,
+              building,
+              corpus,
+              flat,
+              addressId,
+            } = item;
+            const hasNode = sortedByHouses.hasOwnProperty(houseId);
             const address =
               'Дом ' + (corpus ? `${building}/${corpus}` : building);
-
-            houses[houseId] = {
+            const initHouseNode = {
               parentId: streetId,
+              streetName,
               id: houseId,
               value: address,
               children: [],
             };
+
+            if (!hasNode) {
+              sortedByHouses[houseId] = { ...initHouseNode };
+            }
+
+            const newItem = {
+              ...item,
+              value: `Квартира ${flat}`,
+              id: addressId,
+            };
+
+            sortedByHouses[houseId].children.push(newItem);
           }
-        }
+        };
 
-        for (const item of housingStock) {
-          const { houseId } = item;
-          const newItem = {
-            ...item,
-            value: `Квартира ${item.flat}`,
-            id: item.addressId,
-          };
-          houses[houseId].children.push(newItem);
-        }
+        const sortStockByStreets = () => {
+          for (const key in sortedByHouses) {
+            const item = sortedByHouses[key];
+            const { parentId, streetName } = item;
+            const hasNode = sortedByStreets.hasOwnProperty(parentId);
+            const initStreetNode = {
+              id: parentId,
+              value: `Улица ${streetName}`,
+              children: [],
+            };
 
-        for (const house in houses) {
-          const { parentId } = houses[house];
-          streets[parentId].children.push(houses[house]);
-        }
+            if (!hasNode) {
+              sortedByStreets[parentId] = { ...initStreetNode };
+            }
 
-        const streetsArray = [];
+            sortedByStreets[parentId].children.push(item);
+          }
+        };
 
-        for (const street in streets) {
-          streetsArray.push(streets[street]);
-        }
+        const unpackSortedStock = () => {
+          for (const key in sortedByStreets) {
+            const item = sortedByStreets[key];
+            unpackedStock.push(item);
+          }
+        };
 
-        setTree(streetsArray);
+        sortStockByHouses();
+        sortStockByStreets();
+        unpackSortedStock();
+
+        setTree(unpackedStock);
         setIsLoading(false);
       });
   }, [selectedCompany]);
@@ -129,7 +145,7 @@ function HousingList() {
 
     return <ul className="housing-list">{renderTree(tree)}</ul>;
   };
-  console.log(tree);
+
   return (
     <div className="housing-list-wrapper">
       <Button
