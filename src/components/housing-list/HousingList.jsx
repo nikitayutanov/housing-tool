@@ -12,6 +12,7 @@ function HousingList({ companyId, setCompanyId }) {
   const [tree, setTree] = useState([]);
   const [clients, setClients] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const areClients = clients.length;
 
   useEffect(() => {
@@ -75,6 +76,7 @@ function HousingList({ companyId, setCompanyId }) {
         }
 
         setTree(streetsArray);
+        setIsLoading(false);
       });
   }, [companyId]);
 
@@ -109,6 +111,16 @@ function HousingList({ companyId, setCompanyId }) {
     areClients ? setClients([]) : setCompanyId('');
   };
 
+  const getHousingList = () => {
+    if (isLoading) {
+      return <Loader />;
+    } else if (!tree.length) {
+      return <p>В выбранной компании пусто :c</p>;
+    }
+
+    return <ul className="housing-list">{renderTree(tree)}</ul>;
+  };
+
   return (
     <div className="housing-list-wrapper">
       <Button
@@ -116,13 +128,7 @@ function HousingList({ companyId, setCompanyId }) {
         value="Назад"
         onClick={handleBackButtonClick}
       />
-      {areClients ? (
-        <ClientList clients={clients} />
-      ) : tree.length ? (
-        <ul className="housing-list">{renderTree(tree)}</ul>
-      ) : (
-        <Loader />
-      )}
+      {areClients ? <ClientList clients={clients} /> : getHousingList()}
       {isModalOpen && (
         <Modal close={closeModal}>
           <p>В выбранной квартире нет жильцов</p>
