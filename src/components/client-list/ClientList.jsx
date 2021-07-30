@@ -4,9 +4,14 @@ import Form from 'components/form/Form';
 import Button from 'components/button/Button';
 import './ClientList.css';
 import { useState } from 'react';
+import { selectClients } from 'selectors';
+import { resetFormValues } from 'actions/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-function ClientList({ clients }) {
+function ClientList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const clients = useSelector(selectClients);
+  const dispatch = useDispatch();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -14,11 +19,16 @@ function ClientList({ clients }) {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    dispatch(resetFormValues());
   };
 
   return (
     <>
-      <Button className="client-list-button" onClick={openModal} value="Добавить" />
+      <Button
+        className="client-list-button"
+        onClick={openModal}
+        value="Добавить"
+      />
       <ul className="clients">
         {clients.map((client) => {
           const { id, bindId, email, name, phone } = client;

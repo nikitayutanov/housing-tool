@@ -1,7 +1,7 @@
 import './ClientCard.css';
 import InfoField from 'components/info-field/InfoField';
 import CloseButton from 'components/close-button/CloseButton';
-import BASE_URL from 'constants.js';
+import { BASE_URL } from 'constants.js';
 
 function ClientCard({ name, phone, email, bindId }) {
   const deleteClient = () => {

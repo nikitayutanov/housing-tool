@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import BASE_URL from 'constants.js';
+import { useDispatch } from 'react-redux';
+import { BASE_URL } from 'constants.js';
+import { selectCompany } from 'actions/actions';
 import Button from 'components/button/Button';
 import Loader from 'components/loader/Loader';
 import './CompanyList.css';
 
-function CompanyList({ setCompanyId }) {
+function CompanyList() {
   const [companies, setCompanies] = useState([]);
   const [selectValue, setSelectValue] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const url = `${BASE_URL}/Request/companies`;
@@ -35,7 +38,7 @@ function CompanyList({ setCompanyId }) {
   };
 
   const handleClick = () => {
-    setCompanyId(selectValue);
+    dispatch(selectCompany(selectValue));
   };
 
   return (

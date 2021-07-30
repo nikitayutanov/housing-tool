@@ -5,18 +5,28 @@ import ClientList from 'components/client-list/ClientList';
 import Modal from 'components/modal/Modal';
 import Button from 'components/button/Button';
 import Loader from 'components/loader/Loader';
-import BASE_URL from 'constants.js';
+import { BASE_URL } from 'constants.js';
 import './HousingList.css';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from 'actions/actions';
+import * as selectors from 'selectors';
 
-function HousingList({ companyId, setCompanyId }) {
+const { selectSelectedCompany, selectClients } = selectors;
+const { resetCompany, resetClients } = actions;
+
+function HousingList() {
   const [tree, setTree] = useState([]);
-  const [clients, setClients] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const areClients = clients.length;
+
+  const selectedCompany = useSelector(selectSelectedCompany);
+  const clients = useSelector(selectClients);
+  const dispatch = useDispatch();
+
+  const isAnyClients = clients.length;
 
   useEffect(() => {
-    const url = `${BASE_URL}/HousingStock?companyId=${companyId}`;
+    const url = `${BASE_URL}/HousingStock?companyId=${selectedCompany}`;
 
     fetch(url)
       .then((response) => response.json())
@@ -78,7 +88,7 @@ function HousingList({ companyId, setCompanyId }) {
         setTree(streetsArray);
         setIsLoading(false);
       });
-  }, [companyId]);
+  }, [selectedCompany]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -90,15 +100,14 @@ function HousingList({ companyId, setCompanyId }) {
 
   const renderTree = (tree) => {
     return tree.map((node) => {
-      const { id, value, children, clients } = node;
+      const { id, value, children, clients: nodeClients } = node;
 
       return (
         <ListItem
           value={value}
           key={id}
           isLeaf={!children?.length}
-          clients={clients}
-          setClients={setClients}
+          clients={nodeClients}
           openModal={openModal}
         >
           {children && <List>{renderTree(children)}</List>}
@@ -108,7 +117,7 @@ function HousingList({ companyId, setCompanyId }) {
   };
 
   const handleBackButtonClick = () => {
-    areClients ? setClients([]) : setCompanyId('');
+    isAnyClients ? dispatch(resetClients()) : dispatch(resetCompany());
   };
 
   const getHousingList = () => {
@@ -120,7 +129,7 @@ function HousingList({ companyId, setCompanyId }) {
 
     return <ul className="housing-list">{renderTree(tree)}</ul>;
   };
-
+  console.log(tree);
   return (
     <div className="housing-list-wrapper">
       <Button
@@ -128,7 +137,7 @@ function HousingList({ companyId, setCompanyId }) {
         value="Назад"
         onClick={handleBackButtonClick}
       />
-      {areClients ? <ClientList clients={clients} /> : getHousingList()}
+      {isAnyClients ? <ClientList /> : getHousingList()}
       {isModalOpen && (
         <Modal close={closeModal}>
           <p>В выбранной квартире нет жильцов</p>

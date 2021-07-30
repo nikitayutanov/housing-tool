@@ -1,10 +1,15 @@
+import { useDispatch, useSelector } from 'react-redux';
 import './Input.css';
+import { selectFormValues } from 'selectors';
+import { setFormValues } from 'actions/actions';
 
 function Input(props) {
-  const { label, type, id, values, setValues } = props;
+  const { label, type, id } = props;
+  const values = useSelector(selectFormValues);
+  const dispatch = useDispatch();
 
   const handleChange = ({ target: { value, id } }) => {
-    setValues((prevValues) => ({ ...prevValues, [id]: value }));
+    dispatch(setFormValues(id, value));
   };
 
   return (
@@ -18,7 +23,7 @@ function Input(props) {
         name={id}
         id={id}
         onChange={handleChange}
-        value={values.id}
+        value={values[id]}
       />
     </div>
   );
