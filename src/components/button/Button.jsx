@@ -2,7 +2,10 @@ import './Button.css';
 
 function Button({ className, value, onClick }) {
   return (
-    <button className={`button ${className}`} onClick={onClick}>
+    <button
+      className={className ? `button ${className}` : 'button'}
+      onClick={onClick}
+    >
       {value}
     </button>
   );

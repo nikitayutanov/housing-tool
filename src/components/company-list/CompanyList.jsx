@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BASE_URL from 'constants.js';
 import Button from 'components/button/Button';
+import Loader from 'components/loader/Loader';
 import './CompanyList.css';
 
 function CompanyList({ setCompanyId }) {
@@ -40,13 +41,17 @@ function CompanyList({ setCompanyId }) {
   return (
     <div className="company-list-wrapper">
       <p className="company-list-text">Выберите управляющую компанию:</p>
-      <select
-        className="company-list"
-        value={selectValue}
-        onChange={handleChange}
-      >
-        {getCompanies()}
-      </select>
+      {companies.length ? (
+        <select
+          className="company-list"
+          value={selectValue}
+          onChange={handleChange}
+        >
+          {getCompanies()}
+        </select>
+      ) : (
+        <Loader />
+      )}
       <Button onClick={handleClick} value="Ок" />
     </div>
   );

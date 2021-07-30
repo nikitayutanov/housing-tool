@@ -1,6 +1,3 @@
-.housing-list-wrapper {
-}
-
 .housing-list ul {
   margin-left: 1rem;
 }
@@ -11,5 +8,5 @@
 
 .back-button {
   margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }

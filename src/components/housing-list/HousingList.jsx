@@ -4,6 +4,7 @@ import ListItem from 'components/list-item/ListItem';
 import ClientList from 'components/client-list/ClientList';
 import Modal from 'components/modal/Modal';
 import Button from 'components/button/Button';
+import Loader from 'components/loader/Loader';
 import BASE_URL from 'constants.js';
 import './HousingList.css';
 
@@ -117,8 +118,10 @@ function HousingList({ companyId, setCompanyId }) {
       />
       {areClients ? (
         <ClientList clients={clients} />
-      ) : (
+      ) : tree.length ? (
         <ul className="housing-list">{renderTree(tree)}</ul>
+      ) : (
+        <Loader />
       )}
       {isModalOpen && (
         <Modal close={closeModal}>
