@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="container">
       {companyId ? (
-        <HousingList companyId={companyId} />
+        <HousingList companyId={companyId} setCompanyId={setCompanyId} />
       ) : (
         <CompanyList setCompanyId={setCompanyId} />
       )}

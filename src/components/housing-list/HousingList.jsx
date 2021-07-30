@@ -3,13 +3,15 @@ import List from 'components/list/List';
 import ListItem from 'components/list-item/ListItem';
 import ClientList from 'components/client-list/ClientList';
 import Modal from 'components/modal/Modal';
+import Button from 'components/button/Button';
 import BASE_URL from 'constants.js';
 import './HousingList.css';
 
-function HousingList({ companyId }) {
+function HousingList({ companyId, setCompanyId }) {
   const [tree, setTree] = useState([]);
   const [clients, setClients] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const areClients = clients.length;
 
   useEffect(() => {
     const url = `${BASE_URL}/HousingStock?companyId=${companyId}`;
@@ -102,11 +104,18 @@ function HousingList({ companyId }) {
     });
   };
 
-  console.log(tree);
+  const handleBackButtonClick = () => {
+    areClients ? setClients([]) : setCompanyId('');
+  };
 
   return (
     <div className="housing-list-wrapper">
-      {clients.length ? (
+      <Button
+        className="back-button"
+        value="Назад"
+        onClick={handleBackButtonClick}
+      />
+      {areClients ? (
         <ClientList clients={clients} />
       ) : (
         <ul className="housing-list">{renderTree(tree)}</ul>
@@ -121,56 +130,3 @@ function HousingList({ companyId }) {
 }
 
 export default HousingList;
-
-{
-  /* <ul className="housing-list">
-  <li className="street">
-    Улица 1
-    <ul className="houses">
-      <li className="house">
-        Дом 1
-        <ul className="flats">
-          <li className="flat">Квартира 1</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>; */
-}
-
-// tree.map((street) => {
-//   const { id, value, children, isOpen } = street;
-
-//   return (
-//     <li key={id} data-id={id} onClick={handleClick}>
-//       {value}
-
-//       {children && (
-//         <ul className={isOpen ? 'houses' : 'houses hidden'}>
-//           {children.map((house) => {
-//             const { id, value, children } = house;
-//             // const address = corpus
-//             //   ? `${building}/${corpus}`
-//             //   : building;
-
-//             return (
-//               <li className="house" key={id} data-id={id}>
-//                 {value}
-
-//                 {children && (
-//                   <ul className="flats">
-//                     {children.map((flatItem) => {
-//                       const { value, id } = flatItem;
-
-//                       return <li key={id}>{value}</li>;
-//                     })}
-//                   </ul>
-//                 )}
-//               </li>
-//             );
-//           })}
-//         </ul>
-//       )}
-//     </li>
-//   );
-// })
